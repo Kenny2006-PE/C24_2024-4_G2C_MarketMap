@@ -1,13 +1,18 @@
 package com.marketmap.backend.service;
 
-
 import com.marketmap.backend.model.Usuario;
 import com.marketmap.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.User;
+
+import java.util.Collections;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -18,5 +23,16 @@ public class UsuarioService {
 
     public Usuario save(Usuario usuario) {
         return usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByCorreo(correo);
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Usuario no encontrado con correo: " + correo);
+        }
+
+        // Retornamos un objeto User de Spring Security con las credenciales del usuario
+        return new User(usuario.getCorreo(), usuario.getPassword(), Collections.emptyList());
     }
 }
