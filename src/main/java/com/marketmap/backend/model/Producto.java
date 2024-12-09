@@ -34,6 +34,9 @@ public class Producto {
     @Column(name = "vendedor_id", nullable = true)
     private Long vendedorId;
 
+    @Transient
+    private Usuario vendedor;  // Relación transitoria para incluir los datos del vendedor
+
     // Getters y setters
     public Long getId() {
         return id;
@@ -107,18 +110,11 @@ public class Producto {
         this.vendedorId = vendedorId;
     }
 
-    @Override
-    public String toString() {
-        return "Producto{" +
-                "id=" + id +
-                ", descripcion='" + descripcion + '\'' +
-                ", estado='" + estado + '\'' +
-                ", imagenUrl='" + imagen_url + '\'' +
-                ", latitud=" + latitud +
-                ", longitud=" + longitud +
-                ", nombre='" + nombre + '\'' +
-                ", precio=" + precio +
-                ", vendedorId=" + vendedorId +
-                '}';
+    public Usuario getVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(Usuario vendedor) {
+        this.vendedor = vendedor;
     }
 }

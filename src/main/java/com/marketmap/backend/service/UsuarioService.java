@@ -27,12 +27,21 @@ public class UsuarioService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByCorreo(correo);
-        if (usuario == null) {
-            throw new UsernameNotFoundException("Usuario no encontrado con correo: " + correo);
-        }
+        // Usamos orElseThrow para lanzar una excepción si no se encuentra el usuario
+        Usuario usuario = usuarioRepository.findByCorreo(correo)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con correo: " + correo));
 
         // Retornamos un objeto User de Spring Security con las credenciales del usuario
         return new User(usuario.getCorreo(), usuario.getPassword(), Collections.emptyList());
+    }
+
+    public Usuario findByCorreo(String correo) {
+        // Usamos orElseThrow para manejar el Optional de manera más directa
+        return usuarioRepository.findByCorreo(correo)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con correo: " + correo));
+    }
+
+    public Usuario findById(Long id) {
+        return usuarioRepository.findById(id).orElse(null);  // Retorna el usuario o null si no se encuentra
     }
 }
