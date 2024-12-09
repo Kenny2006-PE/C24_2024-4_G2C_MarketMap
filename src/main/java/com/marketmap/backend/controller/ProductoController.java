@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/productos")
+@CrossOrigin(origins = "http://localhost:3000") // Permite solicitudes desde tu frontend
 public class ProductoController {
 
     @Autowired
@@ -17,11 +18,15 @@ public class ProductoController {
 
     @PostMapping
     public Producto crearProducto(@RequestBody Producto producto) {
+        System.out.println("Producto recibido en el backend: " + producto);
         return productoService.save(producto);
     }
+
+
 
     @GetMapping
     public List<Producto> obtenerProductos() {
         return productoService.findAll();
     }
 }
+
