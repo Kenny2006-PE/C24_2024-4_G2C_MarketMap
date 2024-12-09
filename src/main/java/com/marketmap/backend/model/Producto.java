@@ -2,7 +2,6 @@ package com.marketmap.backend.model;
 
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name = "producto")
 public class Producto {
@@ -11,29 +10,38 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", nullable = true)
     private String descripcion;
 
-    @Column(name = "estado")
+    @Column(name = "estado", nullable = true)
     private String estado;
 
-    @Column(name = "imagen_url")
-    private String imagenUrl;
+    @Column(name = "imagen_url", nullable = false)
+    private String imagen_url;
 
-    @Column(name = "latitud")
+    @Column(name = "latitud", nullable = false)
     private Double latitud;
 
-    @Column(name = "longitud")
+    @Column(name = "longitud", nullable = false)
     private Double longitud;
 
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "precio")
+    @Column(name = "precio", nullable = false)
     private Double precio;
 
-    @Column(name = "vendedor_id")
+    @Column(name = "vendedor_id", nullable = true)
     private Long vendedorId;
+
+    // Getters y setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getDescripcion() {
         return descripcion;
@@ -51,20 +59,12 @@ public class Producto {
         this.estado = estado;
     }
 
-    public Long getId() {
-        return id;
+    public String getImagen_url() {
+        return imagen_url;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getImagenUrl() {
-        return imagenUrl;
-    }
-
-    public void setImagenUrl(String imagenUrl) {
-        this.imagenUrl = imagenUrl;
+    public void setImagen_url(String imagen_url) {
+        this.imagen_url = imagen_url;
     }
 
     public Double getLatitud() {
@@ -105,5 +105,20 @@ public class Producto {
 
     public void setVendedorId(Long vendedorId) {
         this.vendedorId = vendedorId;
+    }
+
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "id=" + id +
+                ", descripcion='" + descripcion + '\'' +
+                ", estado='" + estado + '\'' +
+                ", imagenUrl='" + imagen_url + '\'' +
+                ", latitud=" + latitud +
+                ", longitud=" + longitud +
+                ", nombre='" + nombre + '\'' +
+                ", precio=" + precio +
+                ", vendedorId=" + vendedorId +
+                '}';
     }
 }

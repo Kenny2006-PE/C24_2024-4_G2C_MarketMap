@@ -1,9 +1,9 @@
 package com.marketmap.backend.controller;
 
-
 import com.marketmap.backend.model.Producto;
 import com.marketmap.backend.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,11 +22,15 @@ public class ProductoController {
         return productoService.save(producto);
     }
 
-
+    @GetMapping("/{id}")
+    public ResponseEntity<Producto> obtenerProductoPorId(@PathVariable Long id) {
+        return productoService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     @GetMapping
-    public List<Producto> obtenerProductos() {
+    public List<Producto> listarProductos() {
         return productoService.findAll();
     }
 }
-
