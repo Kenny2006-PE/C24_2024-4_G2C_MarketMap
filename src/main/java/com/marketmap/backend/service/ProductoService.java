@@ -43,16 +43,9 @@ public class ProductoService {
     }
 
     public Optional<Producto> findById(Long id) {
-        Optional<Producto> producto = productoRepository.findById(id);
-        if (producto.isPresent()) {
-            // Cargar los datos del vendedor (Nombre, Apellido, DNI, Número)
-            Producto p = producto.get();
-            Optional<Usuario> vendedor = usuarioRepository.findById(p.getVendedorId());
-            if (vendedor.isPresent()) {
-                Usuario usuarioVendedor = vendedor.get();
-                p.setVendedor(usuarioVendedor);  // Seteamos los datos del vendedor al producto
-            }
+        if (id == null) {
+            throw new IllegalArgumentException("El ID proporcionado es nulo.");
         }
-        return producto;
+        return productoRepository.findById(id);
     }
 }

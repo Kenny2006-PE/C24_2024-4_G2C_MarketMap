@@ -5,12 +5,14 @@ import com.marketmap.backend.model.Usuario;
 import com.marketmap.backend.service.ProductoService;
 import com.marketmap.backend.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/productos")
@@ -38,15 +40,17 @@ public class ProductoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> obtenerProductoPorId(@PathVariable Long id) {
-        return productoService.findById(id)
-                .map(producto -> {
-                    // Asociar el vendedor al producto
-                    Usuario vendedor = usuarioService.findById(producto.getVendedorId());
-                    producto.setVendedor(vendedor);  // Añadir la información del vendedor
-                    return ResponseEntity.ok(producto);  // Retornar el producto con los datos del vendedor
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> obtenerProductoPorId(@PathVariable("id") Long id) {
+        if (id == null) {
+            return ResponseEntity.badRequest().body("El ID no puede ser nulo.");
+        }
+
+        Optional<Producto> producto = productoService.findById(id);
+        if (producto.isPresent()) {
+            return ResponseEntity.ok(producto.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado.");
+        }
     }
 
     @GetMapping
