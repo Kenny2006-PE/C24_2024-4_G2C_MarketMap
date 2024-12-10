@@ -19,24 +19,21 @@ public class ProductoService {
     private ProductoRepository productoRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;  // Repositorio de Usuario para obtener los datos del vendedor
+    private UsuarioRepository usuarioRepository;
 
     public Producto save(Producto producto) {
-        // Obtener el usuario autenticado (vendedor)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();  // Usamos el nombre de usuario para buscar el vendedor
-
-        // Obtener los detalles del vendedor
+        String username = authentication.getName();
         Optional<Usuario> vendedor = usuarioRepository.findByCorreo(username);
+
         if (vendedor.isPresent()) {
-            producto.setVendedorId(vendedor.get().getId()); // Asignar el vendedor al producto
+            producto.setVendedorId(vendedor.get().getId());
         } else {
-            throw new RuntimeException("Usuario no encontrado");  // En caso de que el vendedor no exista
+            throw new RuntimeException("Usuario no encontrado");
         }
 
-        return productoRepository.save(producto);  // Guardamos el producto con el vendedor asociado
+        return productoRepository.save(producto);
     }
-
 
     public List<Producto> findAll() {
         return productoRepository.findAll();
@@ -47,5 +44,10 @@ public class ProductoService {
             throw new IllegalArgumentException("El ID proporcionado es nulo.");
         }
         return productoRepository.findById(id);
+    }
+
+    // Nuevo método para buscar productos por nombre
+    public List<Producto> buscarPorNombre(String nombre) {
+        return productoRepository.findByNombreContainingIgnoreCase(nombre);
     }
 }

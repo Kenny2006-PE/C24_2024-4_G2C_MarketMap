@@ -53,6 +53,14 @@ public class ProductoController {
         }
     }
 
+    @GetMapping("/buscar")
+    public ResponseEntity<List<Producto>> buscarProductos(@RequestParam String query) {
+        List<Producto> productos = productoService.buscarPorNombre(query);
+        return ResponseEntity.ok(productos);
+    }
+
+
+
     @GetMapping
     public List<Producto> listarProductos() {
         return productoService.findAll();  // Retornar todos los productos
